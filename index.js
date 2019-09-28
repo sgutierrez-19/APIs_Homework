@@ -24,27 +24,18 @@ var corrAnsw = '';
 var currentIndex = 0;
 var timer = 60000;
 
+
+
 // makes it so that start button begins function 'start'
 var startButton = document.querySelector(".startbutton");
-startButton.addEventListener("click", function (){ 
-for (var i = 0; i < quizContent.length; i++) {
+startButton.addEventListener("click", loopQuestions);
+
+
+function loopQuestions() {
     start();
     populate();
     currentIndex++;
-
-    var button = document.querySelector("#quiz");
-    button.addEventListener("click", function (event) {
-    var selection = event.target.textContent;
-
-    // if (selection === corrAnsw) {
-    //     return currentIndex++;
-    //     console.log("Correct");
-    // } else {
-    //     return currentIndex++;
-    //     console.log("Incorrect");
-    // }
-    })
-} } )
+}
 
 function start() {
     //removed start button
@@ -81,8 +72,6 @@ function start() {
     quiz.appendChild(button1);
     quiz.appendChild(button2);
     quiz.appendChild(button3);
-
-    // console.log(selection === corrAnsw);
     return;  
 } 
 
@@ -103,6 +92,18 @@ function populate () {
     document.querySelector(".button1").textContent = shuffledArray[1];
     document.querySelector(".button2").textContent = shuffledArray[2];
     document.querySelector(".button3").textContent = shuffledArray[3];
+
+    var button = document.querySelector("#quiz");
+    button.addEventListener("click", function (event) {
+    var selection = event.target.textContent;
+    console.log(selection);
+
+    if (selection === corrAnsw) {
+        alert("right");
+    } else {
+        alert("wrong");
+    } } )
+    return;
 }
 
 function shuffle(array) {
