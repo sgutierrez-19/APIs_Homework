@@ -4,7 +4,7 @@ var quizContent = [
         answers: ["<script>", "<link>", "<hr>", "<a>"] 
     },
     {
-        question: "Which symbol is used to call a class elemento to: 'document.querySelector(class)?",
+        question: "Which symbol is used to call a class element to: 'document.querySelector(class)",
         answers: [". (Period)", "/ (Forward Slash)", "# (Hashtag)", "@ (At)"] 
     },
     {
@@ -20,14 +20,31 @@ var quizContent = [
         answers: ["Paranthesis ()", "Quotation Marks \"\"", "Curly Brackets {}", "Squared Brackets []"] 
     }
 ];
-
+var corrAnsw = '';
 var currentIndex = 0;
-
-var timer = 0;
+var timer = 60000;
 
 // makes it so that start button begins function 'start'
 var startButton = document.querySelector(".startbutton");
-startButton.addEventListener("click", start)
+startButton.addEventListener("click", function (){ 
+for (var i = 0; i < quizContent.length; i++) {
+    start();
+    populate();
+    currentIndex++;
+
+    var button = document.querySelector("#quiz");
+    button.addEventListener("click", function (event) {
+    var selection = event.target.textContent;
+
+    // if (selection === corrAnsw) {
+    //     return currentIndex++;
+    //     console.log("Correct");
+    // } else {
+    //     return currentIndex++;
+    //     console.log("Incorrect");
+    // }
+    })
+} } )
 
 function start() {
     //removed start button
@@ -65,13 +82,17 @@ function start() {
     quiz.appendChild(button2);
     quiz.appendChild(button3);
 
-    populate();
-}
+    // console.log(selection === corrAnsw);
+    return;  
+} 
+
+
+
 
 function populate () {
     var currQuestion = quizContent[currentIndex].question;
     var answerArray = quizContent[currentIndex].answers;
-    var corrAnsw = answerArray[0]
+    corrAnsw = answerArray[0]
 
     var shuffledArray = shuffle(answerArray)
     console.log("shuffled: " + shuffledArray);
@@ -99,4 +120,7 @@ function shuffle(array) {
     
     return copy;
 }
+
+    // timer = setInterval(, 1000);
+    // console.log("timer" + timer);
 
