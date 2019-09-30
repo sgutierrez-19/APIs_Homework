@@ -1,40 +1,70 @@
 var quizContent = [
     {
         question: "What tag is used to connect your .js to your .html?",
-        answers: ["<script>", "<link>", "<hr>", "<a>"] 
+        answers: ["<script>", "<link>", "<hr>", "<a>"]
     },
     {
         question: "Which symbol is used to call a class element to: 'document.querySelector(class)",
-        answers: [". (Period)", "/ (Forward Slash)", "# (Hashtag)", "@ (At)"] 
+        answers: [". (Period)", "/ (Forward Slash)", "# (Hashtag)", "@ (At)"]
     },
     {
         question: "What would be best to use to go through an array?",
-        answers: ["for", "if...then...", "while", "prompt"] 
+        answers: ["for", "if...then...", "while", "prompt"]
     },
     {
         question: "What should proceed any css changes after a .setAttribute method is used?",
-        answers: ["style", "css", "change", "switch"] 
+        answers: ["style", "css", "change", "switch"]
     },
     {
         question: "What should surround the values of an array variable?",
-        answers: ["Paranthesis ()", "Quotation Marks \"\"", "Curly Brackets {}", "Squared Brackets []"] 
+        answers: ["Paranthesis ()", "Quotation Marks \"\"", "Curly Brackets {}", "Squared Brackets []"]
     }
 ];
 var corrAnsw = '';
 var currentIndex = 0;
 var timer = 60000;
+var time = 59;
 
+function countdown() {
+    document.querySelector("#timer-h1").textContent = 60
+    var counttime = setInterval(function() {
+        document.querySelector("#timer-h1").textContent = time;
+        time--;
 
+        if (time < 0) {
+            clearInterval(counttime);
+            document.querySelector("#timer-h1").textContent = "00 - Times Up!";
+            stopQuiz()
+        }
+    }, 1000)
+}
+
+function wrongAnswer() {
+    var wrongDuration = 1;
+    document.querySelector("#wrong-answer").textContent = "Wrong!  -15 Seconds";
+
+    var wrong = setInterval(function() {
+        document.querySelector("#wrong-answer").textContent = "Wrong!  -15 Seconds";
+        wrongDuration--;
+
+        if (wrongDuration < 0) {
+            document.querySelector("#wrong-answer").textContent = "";
+
+        }
+    }, 1000)
+}
 
 // makes it so that start button begins function 'start'
 var startButton = document.querySelector(".startbutton");
 startButton.addEventListener("click", loopQuestions);
 
 
+
+
 function loopQuestions() {
     start();
     populate();
-    currentIndex++;
+    countdown();
 }
 
 function start() {
@@ -72,13 +102,13 @@ function start() {
     quiz.appendChild(button1);
     quiz.appendChild(button2);
     quiz.appendChild(button3);
-    return;  
-} 
+    return;
+}
 
 
 
 
-function populate () {
+function populate() {
     var currQuestion = quizContent[currentIndex].question;
     var answerArray = quizContent[currentIndex].answers;
     corrAnsw = answerArray[0]
@@ -92,36 +122,65 @@ function populate () {
     document.querySelector(".button1").textContent = shuffledArray[1];
     document.querySelector(".button2").textContent = shuffledArray[2];
     document.querySelector(".button3").textContent = shuffledArray[3];
+}
 
-    var button = document.querySelector("#quiz");
-    button.addEventListener("click", function (event) {
+var button = document.querySelector("#quiz");
+
+button.addEventListener("click", function (event) {
     var selection = event.target.textContent;
     console.log(selection);
 
+
+    var quizStatus = document.querySelector("quiz-Status");
+
     if (selection === corrAnsw) {
-        alert("right");
+        currentIndex++;
+        populate()
+        quizStatus.innerHTML = '';
+        var h2text = quizStatus.createElement("h2");
+        h2text.textContent = "Correct!  Next question..."
+        quizStatus.appendChild(h2text);
+
     } else {
-        alert("wrong");
-    } } )
+        currentIndex++
+        time = time - 15;
+        wrongAnswer()
+        populate()
+        quizStatus.innerHTML = '';
+        var h2text = quizStatus.createElement("h2");
+        h2text.textContent = "Incorrect! -15 seconds. Next question..."
+        quizStatus.appendChild(h2text);
+    }
+
     return;
-}
+
+})
+
 
 function shuffle(array) {
     var copy = [], n = array.length, i;
-    
+
     // While there remain elements to shuffle…
     while (n) {
-    
+
         // Pick a remaining element…
         i = Math.floor(Math.random() * n--);
-    
+
         // And move it to the new array.
         copy.push(array.splice(i, 1)[0]);
     }
-    
+
     return copy;
 }
 
-    // timer = setInterval(, 1000);
-    // console.log("timer" + timer);
+function stopQuiz() {
+    var quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
+    var h2create = document.createElement("h2");
+    h2create.textContent = "Test Failed!  You ran out of time!"
+    quiz.appendChild(h2create);
+}
+
+
+ 
 
