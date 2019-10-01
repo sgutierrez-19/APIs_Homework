@@ -20,10 +20,101 @@ var quizContent = [
         answers: ["Paranthesis ()", "Quotation Marks \"\"", "Curly Brackets {}", "Squared Brackets []"]
     }
 ];
+
 var corrAnsw = '';
 var currentIndex = 0;
-var timer = 60000;
 var time = 59;
+
+// makes it so that start button begins function 'start'
+var startButton = document.querySelector(".startbutton");
+startButton.addEventListener("click", loopQuestions);
+
+function loopQuestions() {
+    start();
+    populate();
+    countdown();
+}
+
+function start() {
+    //removed start button
+    startButton.remove();
+
+    var h2 = document.createElement("h2");
+    h2.setAttribute("id", "current-quest");
+    h2.setAttribute("class", "display-4")
+
+    var button0 = document.createElement("button");
+    button0.setAttribute("class", "btn btn-primary btn-lg button0 aButton");
+    button0.setAttribute("role", "button");
+
+    var button1 = document.createElement("button");
+    button1.setAttribute("class", "btn btn-primary btn-lg button1 aButton");
+    button1.setAttribute("role", "button");
+
+    var button2 = document.createElement("button");
+    button2.setAttribute("class", "btn btn-primary btn-lg button2 aButton");
+    button2.setAttribute("role", "button");
+
+    var button3 = document.createElement("button");
+    button3.setAttribute("class", "btn btn-primary btn-lg button3 aButton");
+    button3.setAttribute("role", "button");
+
+    var hr = document.createElement("hr");
+    hr.setAttribute("class", "my-4");
+
+    var quizForm = document.getElementById("quiz");
+    quizForm.innerHTML = "";
+    quizForm.appendChild(h2);
+    quizForm.appendChild(hr);
+    quizForm.appendChild(button0);
+    quizForm.appendChild(button1);
+    quizForm.appendChild(button2);
+    quizForm.appendChild(button3);
+    return;
+}
+
+function populate() {
+    var currQuestion = quizContent[currentIndex].question;
+    var answerArray = quizContent[currentIndex].answers;
+    corrAnsw = answerArray[0]
+
+    var shuffledArray = shuffle(answerArray)
+    console.log("shuffled: " + shuffledArray);
+    console.log("Answer = " + corrAnsw);
+
+    document.querySelector("#current-quest").textContent = currQuestion;
+    document.querySelector(".button0").textContent = shuffledArray[0];
+    document.querySelector(".button1").textContent = shuffledArray[1];
+    document.querySelector(".button2").textContent = shuffledArray[2];
+    document.querySelector(".button3").textContent = shuffledArray[3];
+}
+
+var button = document.querySelector("#quiz");
+button.addEventListener("click", function (event) {
+    var selection = event.target.textContent;
+    console.log(selection);
+
+    if (selection === corrAnsw) {
+        currentIndex++;
+        populate()
+    } else {
+        currentIndex++
+        time = time - 15;
+        wrongAnswer()
+        populate()
+    }
+    return;
+})
+
+
+function shuffle(array) {
+    var copy = [], n = array.length, i;
+    while (n) {
+        i = Math.floor(Math.random() * n--);
+        copy.push(array.splice(i, 1)[0]);
+    }
+    return copy;
+}
 
 function countdown() {
     document.querySelector("#timer-h1").textContent = 60
@@ -48,129 +139,15 @@ function wrongAnswer() {
         wrongDuration--;
 
         if (wrongDuration < 0) {
+            clearInterval(wrong);
             document.querySelector("#wrong-answer").textContent = "";
+        }
 
+        if (time < 0) {
+            clearInterval(wrong);
+            document.querySelector("#wrong-answer").textContent = "";
         }
     }, 1000)
-}
-
-// makes it so that start button begins function 'start'
-var startButton = document.querySelector(".startbutton");
-startButton.addEventListener("click", loopQuestions);
-
-
-
-
-function loopQuestions() {
-    start();
-    populate();
-    countdown();
-}
-
-function start() {
-    //removed start button
-    startButton.remove();
-
-    var h2 = document.createElement("h2");
-    h2.setAttribute("id", "current-quest");
-    h2.textContent = "PLACEHOLDER QUESTION";
-
-    var button0 = document.createElement("button");
-    button0.setAttribute("class", "btn btn-primary button0 aButton");
-    button0.setAttribute("type", "button");
-    button0.textContent = "Placeholder";
-
-    var button1 = document.createElement("button");
-    button1.setAttribute("class", "btn btn-primary button1 aButton");
-    button1.setAttribute("type", "button");
-    button1.textContent = "Placeholder";
-
-    var button2 = document.createElement("button");
-    button2.setAttribute("class", "btn btn-primary button2 aButton");
-    button2.setAttribute("type", "button");
-    button2.textContent = "Placeholder";
-
-    var button3 = document.createElement("button");
-    button3.setAttribute("class", "btn btn-primary button3 aButton");
-    button3.setAttribute("type", "button");
-    button3.textContent = "Placeholder";
-
-    var quiz = document.getElementById("quiz");
-    quiz.innerHTML = "";
-    quiz.appendChild(h2);
-    quiz.appendChild(button0);
-    quiz.appendChild(button1);
-    quiz.appendChild(button2);
-    quiz.appendChild(button3);
-    return;
-}
-
-
-
-
-function populate() {
-    var currQuestion = quizContent[currentIndex].question;
-    var answerArray = quizContent[currentIndex].answers;
-    corrAnsw = answerArray[0]
-
-    var shuffledArray = shuffle(answerArray)
-    console.log("shuffled: " + shuffledArray);
-    console.log("Answer = " + corrAnsw);
-
-    document.querySelector("#current-quest").textContent = currQuestion;
-    document.querySelector(".button0").textContent = shuffledArray[0];
-    document.querySelector(".button1").textContent = shuffledArray[1];
-    document.querySelector(".button2").textContent = shuffledArray[2];
-    document.querySelector(".button3").textContent = shuffledArray[3];
-}
-
-var button = document.querySelector("#quiz");
-
-button.addEventListener("click", function (event) {
-    var selection = event.target.textContent;
-    console.log(selection);
-
-
-    var quizStatus = document.querySelector("quiz-Status");
-
-    if (selection === corrAnsw) {
-        currentIndex++;
-        populate()
-        quizStatus.innerHTML = '';
-        var h2text = quizStatus.createElement("h2");
-        h2text.textContent = "Correct!  Next question..."
-        quizStatus.appendChild(h2text);
-
-    } else {
-        currentIndex++
-        time = time - 15;
-        wrongAnswer()
-        populate()
-        quizStatus.innerHTML = '';
-        var h2text = quizStatus.createElement("h2");
-        h2text.textContent = "Incorrect! -15 seconds. Next question..."
-        quizStatus.appendChild(h2text);
-    }
-
-    return;
-
-})
-
-
-function shuffle(array) {
-    var copy = [], n = array.length, i;
-
-    // While there remain elements to shuffle…
-    while (n) {
-
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * n--);
-
-        // And move it to the new array.
-        copy.push(array.splice(i, 1)[0]);
-    }
-
-    return copy;
 }
 
 function stopQuiz() {
