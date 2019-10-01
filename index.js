@@ -17,13 +17,17 @@ var quizContent = [
     },
     {
         question: "What should surround the values of an array variable?",
-        answers: ["Paranthesis ()", "Quotation Marks \"\"", "Curly Brackets {}", "Squared Brackets []"]
+        answers: [ "Squared Brackets []", "Paranthesis ()", "Quotation Marks \"\"", "Curly Brackets {}"]
     }
 ];
 
 var corrAnsw = '';
 var currentIndex = 0;
 var time = 59;
+
+localStorage.getItem("score");
+
+
 
 // makes it so that start button begins function 'start'
 var startButton = document.querySelector(".startbutton");
@@ -91,20 +95,28 @@ function populate() {
 
 var button = document.querySelector("#quiz");
 button.addEventListener("click", function (event) {
+    var target1 = event.target.className;
+    console.log(target1.includes("aButton"));
     var selection = event.target.textContent;
     console.log(selection);
-
+    if (target1.includes("aButton")) {
     if (selection === corrAnsw) {
         currentIndex++;
+        if (currentIndex === 5) {
+            quizPassed()
+        }
         populate()
     } else {
         currentIndex++
+        if (currentIndex === 5) {
+            quizPassed()
+        }
         time = time - 15;
         wrongAnswer()
         populate()
     }
     return;
-})
+} })
 
 
 function shuffle(array) {
@@ -122,10 +134,12 @@ function countdown() {
         document.querySelector("#timer-h1").textContent = time;
         time--;
 
+        if (currentIndex === 5) {
+            clearInterval(counttime);        }
         if (time < 0) {
             clearInterval(counttime);
             document.querySelector("#timer-h1").textContent = "00 - Times Up!";
-            stopQuiz()
+            quizFailed()
         }
     }, 1000)
 }
@@ -150,7 +164,7 @@ function wrongAnswer() {
     }, 1000)
 }
 
-function stopQuiz() {
+function quizFailed() {
     var quiz = document.getElementById("quiz");
     quiz.innerHTML = "";
     var h2create = document.createElement("h2");
@@ -158,6 +172,25 @@ function stopQuiz() {
     quiz.appendChild(h2create);
 }
 
+function quizPassed() {
+    var quiz = document.getElementById("quiz");
+    quiz.innerHTML = "";
 
+    var h1create = document.createElement("h1");
+    h1create.textContent = "You Passed!";
+
+    localStorage.setItem("score", time)
+
+    if (localStorage.score < time) {
+        var h2create = document.createElement("h2");
+        h2create.textContent = "Congratulations!  You've got the top score: " + time;
+    } else {
+        var h2create = document.createElement("h2");
+        h2create.textContent = "Your new score is: " + time;
+    }
+
+    quiz.appendChild(h1create);
+    quiz.appendChild(h2create);
+}
  
 
