@@ -23,9 +23,12 @@ var quizContent = [
 
 var corrAnsw = '';
 var currentIndex = 0;
+var scores = JSON.parse(localStorage.getItem("scores")) || [];
+console.log("high scores", scores);
 var time = 59;
+var counttime;
 
-localStorage.getItem("score");
+
 
 
 
@@ -100,21 +103,16 @@ button.addEventListener("click", function (event) {
     var selection = event.target.textContent;
     console.log(selection);
     if (target1.includes("aButton")) {
-    if (selection === corrAnsw) {
-        currentIndex++;
-        if (currentIndex === 5) {
-            quizPassed()
-        }
-        populate()
-    } else {
-        currentIndex++
-        if (currentIndex === 5) {
-            quizPassed()
-        }
+    if (selection !== corrAnsw) {
         time = time - 15;
-        wrongAnswer()
-        populate()
+        document.querySelector("#timer-h1").textContent = time;
+        wrongAnswer();
     }
+    currentIndex++;
+    if (currentIndex === 5) {
+        quizPassed();
+    }
+    populate();
     return;
 } })
 
@@ -130,12 +128,10 @@ function shuffle(array) {
 
 function countdown() {
     document.querySelector("#timer-h1").textContent = 60
-    var counttime = setInterval(function() {
+    counttime = setInterval(function() {
         document.querySelector("#timer-h1").textContent = time;
         time--;
 
-        if (currentIndex === 5) {
-            clearInterval(counttime);        }
         if (time < 0) {
             clearInterval(counttime);
             document.querySelector("#timer-h1").textContent = "00 - Times Up!";
@@ -173,13 +169,26 @@ function quizFailed() {
 }
 
 function quizPassed() {
+    clearInterval(counttime);   
     var quiz = document.getElementById("quiz");
     quiz.innerHTML = "";
 
     var h1create = document.createElement("h1");
     h1create.textContent = "You Passed!";
+    
+    scores.push({
+        score: time,
+        name: 'placeholder'
+    });
 
-    localStorage.setItem("score", time)
+    scores.sort(function(a, b){return b.score - a.score});
+    if (scores.length > 5) {
+        scores.pop();
+    }
+    //sort from highest to lowest
+    //if scores.length >5 then .pop()
+
+    localStorage.setItem ("scores", JSON.stringify(scores));
 
     if (localStorage.score < time) {
         var h2create = document.createElement("h2");
