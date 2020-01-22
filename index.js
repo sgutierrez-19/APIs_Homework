@@ -50,9 +50,9 @@ function start() {
   startButton.classList.add('collapse');
   document.getElementById('quiz').classList.remove('collapse');
 
-  var h2 = document.createElement('h2');
-  h2.setAttribute('id', 'current-quest');
-  h2.setAttribute('class', 'display-4');
+  var h5 = document.createElement('h5');
+  h5.setAttribute('id', 'current-quest');
+  h5.setAttribute('class', 'display-5');
 
   var button0 = document.createElement('button');
   button0.setAttribute('class', 'btn btn-primary btn-lg button0 aButton');
@@ -73,10 +73,18 @@ function start() {
   var hr = document.createElement('hr');
   hr.setAttribute('class', 'my-4');
 
+  var row = document.createElement('div');
+  row.setAttribute('class', 'row');
+
+  var col = document.createElement('div');
+  col.setAttribute('class', 'col-md-12');
+
   var quizForm = document.getElementById('quiz');
   quizForm.innerHTML = '';
-  quizForm.appendChild(h2);
+
+  quizForm.appendChild(h5);
   quizForm.appendChild(hr);
+
   quizForm.appendChild(button0);
   quizForm.appendChild(button1);
   quizForm.appendChild(button2);
@@ -111,6 +119,8 @@ button.addEventListener('click', function(event) {
       time = time - 15;
       document.querySelector('#timer-h1').textContent = time;
       wrongAnswer();
+    } else if (selection === corrAnsw) {
+      rightAnswer();
     }
     currentIndex++;
     if (currentIndex === 5) {
@@ -146,8 +156,28 @@ function countdown() {
   }, 1000);
 }
 
+function rightAnswer() {
+  var rightDuration = 1.5;
+
+  document.querySelector('#wrong-answer').textContent = 'Correct!  Keep it up!';
+
+  var right = setInterval(function() {
+    document.querySelector('#wrong-answer').textContent =
+      'Correct!  Keep it up!';
+    rightDuration--;
+    if (rightDuration < 0) {
+      clearInterval(right);
+      document.querySelector('#wrong-answer').textContent = '';
+    } else if (currentIndex === 5) {
+    } else if (time < 0) {
+      clearInterval(right);
+      document.querySelector('#wrong-answer').textContent = '';
+    }
+  }, 1000);
+}
+
 function wrongAnswer() {
-  var wrongDuration = 1;
+  var wrongDuration = 1.5;
   document.querySelector('#wrong-answer').textContent = 'Wrong!  -15 Seconds';
 
   var wrong = setInterval(function() {
@@ -157,9 +187,8 @@ function wrongAnswer() {
     if (wrongDuration < 0) {
       clearInterval(wrong);
       document.querySelector('#wrong-answer').textContent = '';
-    }
-
-    if (time < 0) {
+    } else if (currentIndex === 5) {
+    } else if (time < 0) {
       clearInterval(wrong);
       document.querySelector('#wrong-answer').textContent = '';
     }
@@ -183,7 +212,7 @@ function quizPassed() {
   h1create.textContent = 'You Passed!';
 
   scores.push({
-    score: time,
+    score: time + 1,
     name: 'placeholder'
   });
 
@@ -199,10 +228,10 @@ function quizPassed() {
   if (localStorage.score < time) {
     var h2create = document.createElement('h2');
     h2create.textContent =
-      "Congratulations!  You've got the top score: " + time;
+      "Congratulations!  You've got the top score: " + (time + 1);
   } else {
     var h2create = document.createElement('h2');
-    h2create.textContent = 'Your new score is: ' + time;
+    h2create.textContent = 'Your new score is: ' + (time + 1);
   }
 
   quiz.appendChild(h1create);
