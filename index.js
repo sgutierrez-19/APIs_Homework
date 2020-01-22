@@ -157,42 +157,40 @@ function countdown() {
 }
 
 function rightAnswer() {
-  var rightDuration = 1.5;
-
-  document.querySelector('#wrong-answer').textContent = 'Correct!  Keep it up!';
+  var rightDuration = 15;
 
   var right = setInterval(function() {
     document.querySelector('#wrong-answer').textContent =
       'Correct!  Keep it up!';
     rightDuration--;
-    if (rightDuration < 0) {
+    if (currentIndex === 4) {
+      return;
+    } else if (rightDuration < 0) {
       clearInterval(right);
       document.querySelector('#wrong-answer').textContent = '';
-    } else if (currentIndex === 5) {
     } else if (time < 0) {
       clearInterval(right);
       document.querySelector('#wrong-answer').textContent = '';
     }
-  }, 1000);
+  }, 100);
 }
 
 function wrongAnswer() {
-  var wrongDuration = 1.5;
-  document.querySelector('#wrong-answer').textContent = 'Wrong!  -15 Seconds';
+  var wrongDuration = 15;
 
   var wrong = setInterval(function() {
     document.querySelector('#wrong-answer').textContent = 'Wrong!  -15 Seconds';
     wrongDuration--;
-
-    if (wrongDuration < 0) {
+    if (currentIndex === 4) {
+      return;
+    } else if (wrongDuration < 0) {
       clearInterval(wrong);
       document.querySelector('#wrong-answer').textContent = '';
-    } else if (currentIndex === 5) {
     } else if (time < 0) {
       clearInterval(wrong);
       document.querySelector('#wrong-answer').textContent = '';
     }
-  }, 1000);
+  }, 100);
 }
 
 function quizFailed() {
