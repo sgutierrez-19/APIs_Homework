@@ -1,12 +1,12 @@
 var quizContent = [
   {
-    question: 'What tag is used to connect your .js to your .html?',
+    question: 'Which tag is used to connect your .js to your .html?',
     answers: ['<script>', '<link>', '<hr>', '<a>']
   },
   {
     question:
       "Which symbol is used to call a class element to: 'document.querySelector(class)",
-    answers: ['. (Period)', '/ (Forward Slash)', '# (Hashtag)', '@ (At)']
+    answers: ['.', '/', '#', '@']
   },
   {
     question: 'What would be best to use to go through an array?',
@@ -14,8 +14,8 @@ var quizContent = [
   },
   {
     question:
-      'What should proceed any css changes after a .setAttribute method is used?',
-    answers: ['style', 'css', 'change', 'switch']
+      'What is the index of "Apple" in: var arr = ["Orange", "Apple", "Banana"]?',
+    answers: ['1', '0', '2', 'A']
   },
   {
     question: 'What should surround the values of an array variable?',
