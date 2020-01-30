@@ -5,7 +5,7 @@ var quizContent = [
   },
   {
     question:
-      "Which symbol is used to call a class element to: 'document.querySelector(class)",
+      "Which symbol is used to call a class element to: 'document.querySelector(class)'",
     answers: ['.', '/', '#', '@']
   },
   {
@@ -30,8 +30,6 @@ var quizContent = [
 
 var corrAnsw = '';
 var currentIndex = 0;
-var scores = JSON.parse(localStorage.getItem('scores')) || [];
-console.log('high scores', scores);
 var time = 59;
 var counttime;
 
@@ -40,6 +38,11 @@ var startButton = document.getElementById('start-button');
 startButton.addEventListener('click', loopQuestions);
 
 function loopQuestions() {
+  document.getElementById('quiz').innerHTML = '';
+  corrAnsw = '';
+  currentIndex = 0;
+  time = 59;
+  counttime;
   start();
   populate();
   countdown();
@@ -191,45 +194,86 @@ function quizFailed() {
   quiz.innerHTML = '';
   var h2create = document.createElement('h2');
   h2create.textContent = 'Test Failed!  You ran out of time!';
-  var restartButton = document.createElement('button');
-  restartButton.setAttribute('class', 'btn btn-primary btn-lg start-button');
-  restartButton.setAttribute('role', 'button');
+  var restart = document.createElement('button');
+  restart.setAttribute('class', 'btn btn-primary btn-lg');
+  restart.setAttribute('id', 'start-button');
+  restart.textContent = 'Restart';
+  quizContent = [
+    {
+      question: 'Which tag is used to connect your .js to your .html?',
+      answers: ['<script>', '<link>', '<hr>', '<a>']
+    },
+    {
+      question:
+        "Which symbol is used to call a class element to: 'document.querySelector(class)'",
+      answers: ['.', '/', '#', '@']
+    },
+    {
+      question: 'What would be best to use to go through an array?',
+      answers: ['for', 'if...then...', 'while', 'prompt']
+    },
+    {
+      question:
+        'What is the index of "Apple" in: var arr = ["Orange", "Apple", "Banana"]?',
+      answers: ['1', '0', '2', 'A']
+    },
+    {
+      question: 'What should surround the values of an array variable?',
+      answers: [
+        'Squared Brackets []',
+        'Paranthesis ()',
+        'Quotation Marks ""',
+        'Curly Brackets {}'
+      ]
+    }
+  ];
   quiz.appendChild(h2create);
-  quiz.appendChild(hr);
-  quiz.appendChild(restartButton);
+  quiz.appendChild(restart);
+  var startButton = document.getElementById('start-button');
+  startButton.addEventListener('click', loopQuestions);
 }
 
 function quizPassed() {
   clearInterval(counttime);
   var quiz = document.getElementById('quiz');
   quiz.innerHTML = '';
-
   var h1create = document.createElement('h1');
   h1create.textContent = 'You Passed!';
-
-  scores.push({
-    score: time + 1,
-    name: 'placeholder'
-  });
-
-  scores.sort(function(a, b) {
-    return b.score - a.score;
-  });
-  if (scores.length > 5) {
-    scores.pop();
-  }
-
-  localStorage.setItem('scores', JSON.stringify(scores));
-
-  if (localStorage.score < time) {
-    var h2create = document.createElement('h2');
-    h2create.textContent =
-      "Congratulations!  You've got the top score: " + (time + 1);
-  } else {
-    var h2create = document.createElement('h2');
-    h2create.textContent = 'Your new score is: ' + (time + 1);
-  }
-
+  var restart = document.createElement('button');
+  restart.setAttribute('class', 'btn btn-primary btn-lg');
+  restart.setAttribute('id', 'start-button');
+  restart.textContent = 'Restart';
+  quizContent = [
+    {
+      question: 'Which tag is used to connect your .js to your .html?',
+      answers: ['<script>', '<link>', '<hr>', '<a>']
+    },
+    {
+      question:
+        "Which symbol is used to call a class element to: 'document.querySelector(class)'",
+      answers: ['.', '/', '#', '@']
+    },
+    {
+      question: 'What would be best to use to go through an array?',
+      answers: ['for', 'if...then...', 'while', 'prompt']
+    },
+    {
+      question:
+        'What is the index of "Apple" in: var arr = ["Orange", "Apple", "Banana"]?',
+      answers: ['1', '0', '2', 'A']
+    },
+    {
+      question: 'What should surround the values of an array variable?',
+      answers: [
+        'Squared Brackets []',
+        'Paranthesis ()',
+        'Quotation Marks ""',
+        'Curly Brackets {}'
+      ]
+    }
+  ];
   quiz.appendChild(h1create);
-  quiz.appendChild(h2create);
+  quiz.appendChild(restart);
+  var startButton = document.getElementById('start-button');
+  startButton.addEventListener('click', loopQuestions);
 }
