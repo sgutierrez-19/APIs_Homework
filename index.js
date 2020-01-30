@@ -73,18 +73,11 @@ function start() {
   var hr = document.createElement('hr');
   hr.setAttribute('class', 'my-4');
 
-  var row = document.createElement('div');
-  row.setAttribute('class', 'row');
-
-  var col = document.createElement('div');
-  col.setAttribute('class', 'col-md-12');
-
   var quizForm = document.getElementById('quiz');
   quizForm.innerHTML = '';
 
   quizForm.appendChild(h5);
   quizForm.appendChild(hr);
-
   quizForm.appendChild(button0);
   quizForm.appendChild(button1);
   quizForm.appendChild(button2);
@@ -198,7 +191,12 @@ function quizFailed() {
   quiz.innerHTML = '';
   var h2create = document.createElement('h2');
   h2create.textContent = 'Test Failed!  You ran out of time!';
+  var restartButton = document.createElement('button');
+  restartButton.setAttribute('class', 'btn btn-primary btn-lg start-button');
+  restartButton.setAttribute('role', 'button');
   quiz.appendChild(h2create);
+  quiz.appendChild(hr);
+  quiz.appendChild(restartButton);
 }
 
 function quizPassed() {
